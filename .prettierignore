@@ -1,0 +1,8 @@
+export/
+deployments/
+artifacts/
+cache/
+coverage/
+node_modules/
+package.json
+frontend/contracts/hardhat/typechain
