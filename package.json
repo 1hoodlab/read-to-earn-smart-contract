@@ -2,7 +2,8 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "npx hardhat compile",
-    "test": "yarn cache clean && yarn compile && npx hardhat test"
+    "test": "yarn cache clean && yarn compile && npx hardhat test",
+    "deploy:bsc": "npx hardhat run --network bsc scripts/deploy.ts"
   },
   "devDependencies": {
     "@ethereum-waffle/chai": "^4.0.10",
@@ -30,6 +31,7 @@
     "@nomiclabs/hardhat-waffle": "^2.0.5",
     "@openzeppelin/contracts": "^4.8.1",
     "@openzeppelin/contracts-upgradeable": "^4.8.1",
+    "@openzeppelin/hardhat-upgrades": "^1.22.1",
     "@symfoni/hardhat-react": "^0.3.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",

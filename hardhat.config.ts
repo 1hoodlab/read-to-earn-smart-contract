@@ -4,6 +4,7 @@ import "hardhat-deploy-ethers";
 import { HardhatUserConfig } from "hardhat/types";
 import "solidity-coverage";
 import "@nomiclabs/hardhat-etherscan";
+import "@openzeppelin/hardhat-upgrades";
 import "@symfoni/hardhat-react";
 import "hardhat-gas-reporter";
 
@@ -11,9 +12,9 @@ import "hardhat-gas-reporter";
 // * unless this becomes opt-in, remove the comment out
 // * to generate the new types
 // * relating github issue: https://github.com/rhlsthrm/hardhat-typechain/issues/12
-import '@typechain/hardhat'
-import '@nomiclabs/hardhat-ethers'
-import '@nomiclabs/hardhat-waffle'
+import "@typechain/hardhat";
+import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-waffle";
 
 function node_url(networkName: string): string {
   if (networkName) {
@@ -54,8 +55,8 @@ function getMnemonic(networkName?: string): string {
   return mnemonic;
 }
 function accounts(networkName?: string): { mnemonic: string } {
-    return { mnemonic: getMnemonic(networkName) };
-  }
+  return { mnemonic: getMnemonic(networkName) };
+}
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -71,7 +72,9 @@ const config: HardhatUserConfig = {
     bsc: {
       url: node_url("bsc"),
       gas: 6_000_000,
-      accounts: ['03e9bbeba35050fb18402603c24ed7f5051d0f97b762ebf68a363fbbf700000a'],
+      accounts: [
+        "80e6fada352999785a6642f6a5655a8a1a3e7bb5d320b4c0879fc244dfa53ddf",
+      ],
       gasPrice: 50000000000,
     },
     polygon: {
@@ -99,7 +102,7 @@ const config: HardhatUserConfig = {
     // },
   },
   paths: {
-    sources: "./src"
+    sources: "./src",
   },
   mocha: {
     timeout: 0,
