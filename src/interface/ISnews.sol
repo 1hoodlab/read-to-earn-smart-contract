@@ -33,13 +33,14 @@ interface ISnews {
     event ClaimToken(
         uint256 indexed tokenId,
         address readerAddress,
-        uint256 tokenValue
+        uint256 tokenValue,
+        string transactionId
     );
 
     function createNews(string memory slug, uint256 totalSupply) external;
 
     function claimToken(
-        uint256 tokenId,
+        string memory slug,
         string calldata transactionId,
         EIP712Signature calldata _signature
     ) external;

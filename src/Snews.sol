@@ -26,7 +26,7 @@ contract Snews is
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     IResolver private resolver;
-
+    address private signer;
     CountersUpgradeable.Counter private _newsIds;
 
     bytes32 public constant WRITER_ROLE = keccak256("WRITER_ROLE");
@@ -37,17 +37,23 @@ contract Snews is
         );
 
     bytes32 private constant CLAIM_TOKEN_TYPEHASH =
-        keccak256("Claim(address from, uint256 tokenId, uint256 value)");
+        keccak256(
+            "Claim(address from, uint256 tokenId, uint256 nonce, uint256 value)"
+        );
+
+    bytes32 DOMAIN_SEPARATOR;
 
     mapping(bytes32 => News) public newsStorage;
     mapping(bytes32 => uint256) public newsFund;
     mapping(string => bool) public slugs;
+    mapping(address => mapping(uint256 => bool)) public userClaimNews;
+    mapping(address => uint256) public tokenWithDrawalNonces;
 
     function __Snews_init(address _resolver) public initializer {
         __ERC721_init("News of Snews", "SNS");
         __Ownable_init();
         _setupRole(WRITER_ROLE, _msgSender());
-
+        DOMAIN_SEPARATOR = _calculateDomainSeparator();
         resolver = IResolver(_resolver);
     }
 
@@ -74,10 +80,13 @@ contract Snews is
     function hash(
         address from,
         uint256 tokenId,
+        uint256 nonce,
         uint256 value
     ) internal pure returns (bytes32) {
         return
-            keccak256(abi.encode(CLAIM_TOKEN_TYPEHASH, from, tokenId, value));
+            keccak256(
+                abi.encode(CLAIM_TOKEN_TYPEHASH, from, tokenId, nonce, value)
+            );
     }
 
     function _calculateDomainSeparator() internal view returns (bytes32) {
@@ -109,7 +118,7 @@ contract Snews is
         nonReentrant
         onlyRole(WRITER_ROLE)
     {
-        require(!slugs[slug], "Slug invalid!");
+        require(!slugs[slug], "The Slug was used by other people!");
         if (totalSupply != 0) {
             _handleIncomingFund(
                 totalSupply,
@@ -134,10 +143,57 @@ contract Snews is
     }
 
     function claimToken(
-        uint256 tokenId,
+        string memory slug,
         string calldata transactionId,
         EIP712Signature calldata _signature
-    ) external override nonReentrant {}
+    ) external override nonReentrant {
+        News memory currentNews = newsStorage[
+            keccak256(abi.encodePacked(slug))
+        ];
+
+        require(
+            !userClaimNews[_msgSender()][currentNews.tokenId],
+            "user has claimed this news!"
+        );
+        require(currentNews.totalSupply != 0, "The News can't claim!");
+
+        bytes32 digest = keccak256(
+            abi.encodePacked(
+                "\x19\x01",
+                DOMAIN_SEPARATOR,
+                hash(
+                    _msgSender(),
+                    currentNews.tokenId,
+                    tokenWithDrawalNonces[_msgSender()]++,
+                    currentNews.totalSupply
+                )
+            )
+        );
+
+        address recoveredAddress = ecrecover(
+            digest,
+            _signature.v,
+            _signature.r,
+            _signature.s
+        );
+
+        require(recoveredAddress == signer, "Signature invalid");
+
+        _handleOutgoingFund(
+            _msgSender(),
+            currentNews.totalSupply,
+            resolver.getPaymentToken(uint8(IResolver.PaymentToken.USDT))
+        );
+
+        emit ClaimToken(
+            currentNews.tokenId,
+            _msgSender(),
+            currentNews.totalSupply,
+            transactionId
+        );
+
+        currentNews.totalSupply = 0;
+    }
 
     function _handleIncomingFund(uint256 amount, address currency) internal {
         if (currency == address(0)) {
@@ -170,5 +226,9 @@ contract Snews is
         } else {
             IERC20Upgradeable(currency).safeTransfer(to, amount);
         }
+    }
+
+    function setSigner(address _signer) external onlyOwner {
+        signer = _signer;
     }
 }
