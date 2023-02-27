@@ -1,7 +1,7 @@
 // author: Hoando.
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity 0.8.17;
+pragma solidity 0.8.19;
 import "./interface/IResolver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 

@@ -60,7 +60,7 @@ function accounts(networkName?: string): { mnemonic: string } {
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.17",
+    version: "0.8.19",
     settings: {
       optimizer: {
         enabled: true,
