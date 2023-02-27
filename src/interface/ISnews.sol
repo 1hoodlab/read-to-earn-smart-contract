@@ -44,4 +44,6 @@ interface ISnews {
         string calldata transactionId,
         EIP712Signature calldata _signature
     ) external;
+
+    function approveWriterRole(address) external;
 }

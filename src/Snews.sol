@@ -195,6 +195,15 @@ contract Snews is
         currentNews.totalSupply = 0;
     }
 
+    function approveWriterRole(address account)
+        external
+        override
+        onlyOwner
+        nonReentrant
+    {
+        _setupRole(WRITER_ROLE, account);
+    }
+
     function _handleIncomingFund(uint256 amount, address currency) internal {
         if (currency == address(0)) {
             require(
