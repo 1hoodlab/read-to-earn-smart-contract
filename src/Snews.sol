@@ -45,16 +45,19 @@ contract Snews is
 
     mapping(bytes32 => News) public newsStorage;
     mapping(bytes32 => uint256) public newsFund;
-    mapping(string => bool) public slugs;
+    mapping(string => bool) public slugStorage;
     mapping(address => mapping(uint256 => bool)) public userClaimNews;
     mapping(address => uint256) public tokenWithDrawalNonces;
 
-    function __Snews_init(address _resolver) public initializer {
+    string public version;
+
+    function __Snews_init(address _resolver, string _version) public initializer {
         __ERC721_init("News of Snews", "SNS");
         __Ownable_init();
         _setupRole(WRITER_ROLE, _msgSender());
         DOMAIN_SEPARATOR = _calculateDomainSeparator();
         resolver = IResolver(_resolver);
+        version = _version;
     }
 
     function _msgSender() internal view virtual override returns (address) {
@@ -94,7 +97,7 @@ contract Snews is
             hash(
                 EIP712Domain({
                     name: "SNews",
-                    version: "1.0",
+                    version: version,
                     verifyingContract: address(this)
                 })
             );
@@ -118,7 +121,7 @@ contract Snews is
         nonReentrant
         onlyRole(WRITER_ROLE)
     {
-        require(!slugs[slug], "The Slug was used by other people!");
+        require(!slugStorage[slug], "The Slug was used by other people!");
         if (totalSupply != 0) {
             _handleIncomingFund(
                 totalSupply,
@@ -136,7 +139,7 @@ contract Snews is
             owner: _msgSender()
         });
 
-        slugs[slug] = true;
+        slugStorage[slug] = true;
         _safeMint(_msgSender(), _tokenId);
         _newsIds.increment();
         emit CreateNews(_tokenId, _msgSender(), slug, totalSupply);
@@ -210,6 +213,7 @@ contract Snews is
                 msg.value == amount,
                 "Sent BNB Value does not match specified bid amount"
             );
+
             (bool isSuccess, ) = address(this).call{value: msg.value}("");
             require(isSuccess, "Transfer failed: gas error");
         } else {
