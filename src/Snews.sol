@@ -51,7 +51,7 @@ contract Snews is
 
     string public version;
 
-    function __Snews_init(address _resolver, string _version) public initializer {
+    function __Snews_init(address _resolver, string memory _version) public initializer {
         __ERC721_init("News of Snews", "SNS");
         __Ownable_init();
         _setupRole(WRITER_ROLE, _msgSender());
@@ -160,6 +160,7 @@ contract Snews is
         );
         require(currentNews.totalSupply != 0, "The News can't claim!");
 
+        //reference: https://eips.ethereum.org/EIPS/eip-712
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",

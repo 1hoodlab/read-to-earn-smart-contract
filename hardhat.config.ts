@@ -72,9 +72,7 @@ const config: HardhatUserConfig = {
     bsc: {
       url: node_url("bsc"),
       gas: 6_000_000,
-      accounts: [
-        "80e6fada352999785a6642f6a5655a8a1a3e7bb5d320b4c0879fc244dfa53ddf",
-      ],
+      accounts: [process.env.DEPLOYER_ADDRESS as string],
       gasPrice: 50000000000,
     },
     polygon: {
