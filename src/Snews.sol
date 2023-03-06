@@ -25,7 +25,7 @@ contract Snews is
     using SafeERC20Upgradeable for IERC20Upgradeable;
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
-    IResolver private resolver;
+    IResolver public resolver;
     address private signer;
     CountersUpgradeable.Counter private _newsIds;
 
@@ -51,7 +51,10 @@ contract Snews is
 
     string public version;
 
-    function __Snews_init(address _resolver, string memory _version) public initializer {
+    function __Snews_init(
+        address _resolver,
+        string memory _version
+    ) public initializer {
         __ERC721_init("News of Snews", "SNS");
         __Ownable_init();
         _setupRole(WRITER_ROLE, _msgSender());
@@ -64,11 +67,9 @@ contract Snews is
         return msg.sender;
     }
 
-    function hash(EIP712Domain memory eip712Domain)
-        internal
-        pure
-        returns (bytes32)
-    {
+    function hash(
+        EIP712Domain memory eip712Domain
+    ) internal pure returns (bytes32) {
         return
             keccak256(
                 abi.encode(
@@ -103,7 +104,9 @@ contract Snews is
             );
     }
 
-    function supportsInterface(bytes4 interfaceId)
+    function supportsInterface(
+        bytes4 interfaceId
+    )
         public
         view
         virtual
@@ -115,18 +118,14 @@ contract Snews is
             super.supportsInterface(interfaceId);
     }
 
-    function createNews(string memory slug, uint256 totalSupply)
-        external
-        override
-        nonReentrant
-        onlyRole(WRITER_ROLE)
-    {
+    function createNews(
+        string memory slug,
+        uint8 _pt,
+        uint256 totalSupply
+    ) external override nonReentrant onlyRole(WRITER_ROLE) {
         require(!slugStorage[slug], "The Slug was used by other people!");
         if (totalSupply != 0) {
-            _handleIncomingFund(
-                totalSupply,
-                resolver.getPaymentToken(uint8(IResolver.PaymentToken.USDT))
-            );
+            _handleIncomingFund(totalSupply, resolver.getPaymentToken(_pt));
             newsFund[keccak256(abi.encodePacked(slug))] = totalSupply;
         }
 
@@ -136,13 +135,14 @@ contract Snews is
             tokenId: _tokenId,
             slug: slug,
             totalSupply: totalSupply,
-            owner: _msgSender()
+            owner: _msgSender(),
+            paymentToken: _pt
         });
 
         slugStorage[slug] = true;
         _safeMint(_msgSender(), _tokenId);
         _newsIds.increment();
-        emit CreateNews(_tokenId, _msgSender(), slug, totalSupply);
+        emit CreateNews(_tokenId, _msgSender(), slug, totalSupply, _pt);
     }
 
     function claimToken(
@@ -186,7 +186,7 @@ contract Snews is
         _handleOutgoingFund(
             _msgSender(),
             currentNews.totalSupply,
-            resolver.getPaymentToken(uint8(IResolver.PaymentToken.USDT))
+            resolver.getPaymentToken(currentNews.paymentToken)
         );
 
         emit ClaimToken(
@@ -199,12 +199,9 @@ contract Snews is
         currentNews.totalSupply = 0;
     }
 
-    function approveWriterRole(address account)
-        external
-        override
-        onlyOwner
-        nonReentrant
-    {
+    function approveWriterRole(
+        address account
+    ) external override onlyOwner nonReentrant {
         _setupRole(WRITER_ROLE, account);
     }
 

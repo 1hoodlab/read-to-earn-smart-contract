@@ -21,13 +21,15 @@ interface ISnews {
         string slug;
         uint256 totalSupply;
         address owner;
+        uint8 paymentToken;
     }
 
     event CreateNews(
         uint256 indexed tokenId,
         address indexed ownerAddress,
         string slug,
-        uint256 totalSupply
+        uint256 totalSupply,
+        uint8 paymentToken
     );
 
     event ClaimToken(
@@ -37,7 +39,11 @@ interface ISnews {
         string transactionId
     );
 
-    function createNews(string memory slug, uint256 totalSupply) external;
+    function createNews(
+        string memory slug,
+        uint8 _pt,
+        uint256 totalSupply
+    ) external;
 
     function claimToken(
         string memory slug,
