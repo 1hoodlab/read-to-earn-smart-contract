@@ -38,7 +38,7 @@ contract Snews is
 
     bytes32 private constant CLAIM_TOKEN_TYPEHASH =
         keccak256(
-            "Claim(address from, uint256 tokenId, uint256 nonce, uint256 value)"
+            "Claim(address from,uint256 tokenId,uint256 nonce,uint256 value)"
         );
 
     bytes32 DOMAIN_SEPARATOR;
@@ -48,7 +48,7 @@ contract Snews is
     mapping(string => bool) public slugStorage;
     mapping(address => mapping(uint256 => bool)) public userClaimNews;
     mapping(address => uint256) public tokenWithDrawalNonces;
-
+    
     string public version;
 
     function __Snews_init(
