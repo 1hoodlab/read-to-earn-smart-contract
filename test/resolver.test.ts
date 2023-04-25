@@ -5,7 +5,7 @@ import { SignerWithAddress } from "hardhat-deploy-ethers/signers";
 import { BigNumber } from "ethers";
 import { Resolver } from "../frontend/src/hardhat/typechain/src/Resolver";
 
-describe("Hello.sol Contract Testing", () => {
+describe("Resolver.sol Contract Testing", () => {
   let owner: SignerWithAddress;
   let resolverContract: Resolver;
   
