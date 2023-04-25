@@ -2,7 +2,7 @@ name: Run Unit test
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 env:
-  BSC_TESTNET_URL: ${{ env.BSC_TESTNET_URL }}
+  BSC_TESTNET_URL: ${{ vars.BSC_TESTNET_URL }}
   DEPLOYER_ADDRESS: ${{ secrets.DEPLOYER_ADDRESS }}
   RESOLVER_CONTRACT_ADDRESS:
   USDT_CONTRACT_ADDRESS:
