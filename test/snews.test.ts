@@ -9,16 +9,18 @@ import { Resolver } from "../frontend/src/hardhat/typechain/src/Resolver";
 import { ServerSignature } from "./server";
 
 const USDT_TOKEN_ID = 1;
-async function exportClaimToken(tx: any){
+async function exportClaimToken(tx: any) {
   let txr = await tx.wait();
-  let claimTokenEvent = txr.events.filter((event: any) => event.event === "ClaimToken")[0];
-  const [tokenId, from,totalSupply, transactionId] = claimTokenEvent.args;
+  let claimTokenEvent = txr.events.filter(
+    (event: any) => event.event === "ClaimToken"
+  )[0];
+  const [tokenId, from, totalSupply, transactionId] = claimTokenEvent.args;
   return {
     tokenId,
     from,
     totalSupply,
-    transactionId
-  }
+    transactionId,
+  };
 }
 async function exportCeateNewsEvent(tx: any) {
   let txr = await tx.wait();
@@ -151,16 +153,17 @@ describe("Snews.sol Contract Testing", function () {
         });
 
       let claimEventData = await exportClaimToken(tx2);
-      
+
       expect(claimEventData.tokenId).to.be.eq(TOKEN_ID);
       expect(claimEventData.from).to.be.eq(reader.address);
-      expect(claimEventData.totalSupply).to.be.eq(ethers.utils.parseEther(TOTAL_SUPPLY));
+      expect(claimEventData.totalSupply).to.be.eq(
+        ethers.utils.parseEther(TOTAL_SUPPLY)
+      );
       expect(claimEventData.transactionId).to.be.eq("transaction#01");
 
       const readerBalance = await tokenUSDTContract.balanceOf(reader.address);
       // check reader's balance
       expect(readerBalance).to.be.eq(ethers.utils.parseEther(TOTAL_SUPPLY));
-      
     });
     it("Create news with 0 USDT", async function () {
       const slug = "lorem-spidreum";
