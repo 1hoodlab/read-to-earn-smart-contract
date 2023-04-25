@@ -3,7 +3,7 @@ import { SignerWithAddress } from "hardhat-deploy-ethers/signers";
 
 // config for sign message on blockchain
 export const DATA_DOMAIN_NAME = "SNews";
-export const DATA_DOMAIN_VERSION = "1.0";
+export const DATA_DOMAIN_VERSION = "v1.0";
 export async function ServerSignature(
   snews_contract_address: string,
   from: string,
@@ -13,7 +13,8 @@ export async function ServerSignature(
   slug: string,
   signer: SignerWithAddress
 ) {
-    console.log(snews_contract_address)
+
+    console.log("SNEW address: ", snews_contract_address)
   const domain: TypedDataDomain = {
     name: DATA_DOMAIN_NAME,
     version: DATA_DOMAIN_VERSION,

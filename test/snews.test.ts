@@ -26,14 +26,14 @@ async function exportCeateNewsEvent(tx: any) {
   };
 }
 
-describe("Hello.sol Contract Testing", function () {
+describe("Snews.sol Contract Testing", function () {
   let owner: SignerWithAddress;
   let root: SignerWithAddress;
   let reader: SignerWithAddress;
 
 
   let snewsContract: Snews | Contract;
-  
+
   let resolverContract: Resolver | Contract;
   let tokenUSDTContract: USDTToken | Contract;
   context("Test Snews function", function () {
@@ -55,7 +55,7 @@ describe("Hello.sol Contract Testing", function () {
 
       snewsContract = await upgrades.deployProxy(
         this.SnewsContract,
-        [resolverContract.address, "v1.0"],
+        [resolverContract.address],
         { initializer: "__Snews_init" }
       );
       snewsContract.deployed();
@@ -117,25 +117,27 @@ describe("Hello.sol Contract Testing", function () {
       expect(eventData.paymenToken).to.be.eq(1);
 
       await snewsContract.connect(owner).setSigner(root.address);
-
       const signature = await ServerSignature(
-        snewsContract.address,
-        reader.address,
+      snewsContract.address.toLowerCase(),
+        reader.address.toLowerCase(),
         "35",
         0,
-        1,
+        0,
         slug,
         root
       );
 
+      
+      
+      console.log("address:", reader.address.toLowerCase())
       await snewsContract
         .connect(reader)
-        .claimToken(slug, signature.transaction_id, [
-          0,
-          signature.v,
-          signature.r,
-          signature.s,
-        ]);
+        .claimToken(slug, signature.transaction_id, {
+          v: signature.v,
+          r: signature.r,
+          s: signature.s,
+          deadline: 0,
+        });
     });
     it("Create news with 0 USDT", async function () {
       const slug = "lorem-spidreum";

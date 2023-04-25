@@ -48,19 +48,13 @@ contract Snews is
     mapping(string => bool) public slugStorage;
     mapping(address => mapping(uint256 => bool)) public userClaimNews;
     mapping(address => uint256) public tokenWithDrawalNonces;
-    
-    string public version;
 
-    function __Snews_init(
-        address _resolver,
-        string memory _version
-    ) public initializer {
+    function __Snews_init(address _resolver) public initializer {
         __ERC721_init("News of Snews", "SNS");
         __Ownable_init();
         _setupRole(WRITER_ROLE, _msgSender());
         DOMAIN_SEPARATOR = _calculateDomainSeparator();
         resolver = IResolver(_resolver);
-        version = _version;
     }
 
     function _msgSender() internal view virtual override returns (address) {
@@ -98,7 +92,7 @@ contract Snews is
             hash(
                 EIP712Domain({
                     name: "SNews",
-                    version: version,
+                    version: "v1.0",
                     verifyingContract: address(this)
                 })
             );

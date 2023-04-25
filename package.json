@@ -21,7 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "chai": "^4.3.7",
-    "ethers": "5.0.0",
+    "ethers": "^5.7.2",
     "hardhat": "^2.12.6",
     "prettier": "^2.8.4",
     "prettier-plugin-solidity": "^1.1.2",
