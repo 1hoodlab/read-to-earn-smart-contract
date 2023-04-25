@@ -8,6 +8,7 @@ import { Resolver } from "../frontend/src/hardhat/typechain/src/Resolver";
 describe("Hello.sol Contract Testing", () => {
   let owner: SignerWithAddress;
   let resolverContract: Resolver;
+  
   context("Test Whoami function", function () {
     beforeEach(async function () {
       let signer = await ethers.getSigners();
