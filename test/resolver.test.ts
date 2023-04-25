@@ -9,7 +9,7 @@ describe("Resolver.sol Contract Testing", () => {
   let owner: SignerWithAddress;
   let resolverContract: Resolver;
   
-  context("Test Whoami function", function () {
+  context("Test Resolver function", function () {
     beforeEach(async function () {
       let signer = await ethers.getSigners();
       owner = signer[0];
