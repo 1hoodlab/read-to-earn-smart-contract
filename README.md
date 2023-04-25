@@ -40,7 +40,7 @@ To run this project, you will need to add the following environment variables to
 - TokenUSDT address: 0xd73d3E44a6184179cd9c09cb2e2647981b716568
 
 ## Snews Contract Address
-- address: 0x13828ad321291e3897557Bb9fEfe76Bcb969D3db
+- address: 0x1925F67D565a2387b24b7775aD92c823C70623cf
 
 ## Authors
 

@@ -14,7 +14,6 @@ export async function ServerSignature(
   signer: SignerWithAddress
 ) {
 
-    console.log("SNEW address: ", snews_contract_address)
   const domain: TypedDataDomain = {
     name: DATA_DOMAIN_NAME,
     version: DATA_DOMAIN_VERSION,

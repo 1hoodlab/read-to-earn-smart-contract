@@ -5,11 +5,9 @@ async function main() {
   const RESOLVER_CONTRACT_ADDRESS = process.env
     .RESOLVER_CONTRACT_ADDRESS as string;
   console.log("Deploying...");
-  const snews = await upgrades.deployProxy(
-    Snews,
-    [RESOLVER_CONTRACT_ADDRESS, "v1.0"],
-    { initializer: "__Snews_init" }
-  );
+  const snews = await upgrades.deployProxy(Snews, [RESOLVER_CONTRACT_ADDRESS], {
+    initializer: "__Snews_init",
+  });
   await snews.deployed();
   console.log("Snews deployed to:", snews.address);
 }

@@ -99,37 +99,37 @@ describe("Snews.sol Contract Testing", function () {
 
     it("Claim news", async function () {
       const slug = "lorem-spidreum";
-      //
+      const TOTAL_SUPPLY = "35";
+      const TOKEN_ID = 0;
+      const PAYMENT_TOKEN = 1;
       await tokenUSDTContract
         .connect(owner)
-        .approve(snewsContract.address, ethers.utils.parseEther("35"));
+        .approve(snewsContract.address, ethers.utils.parseEther(TOTAL_SUPPLY));
 
       let tx = await snewsContract
         .connect(owner)
-        .createNews(slug, USDT_TOKEN_ID, ethers.utils.parseEther("35"));
+        .createNews(slug, USDT_TOKEN_ID, ethers.utils.parseEther(TOTAL_SUPPLY));
 
       const eventData = await exportCeateNewsEvent(tx);
 
-      expect(eventData.tokenId).to.be.equal(0);
+      expect(eventData.tokenId).to.be.equal(TOKEN_ID);
       expect(eventData.ownerAddress).to.be.equal(owner.address);
       expect(eventData.slug).to.be.eq(slug);
-      expect(eventData.totalSupply).to.be.eq(ethers.utils.parseEther("35"));
-      expect(eventData.paymenToken).to.be.eq(1);
+      expect(eventData.totalSupply).to.be.eq(ethers.utils.parseEther(TOTAL_SUPPLY));
+      expect(eventData.paymenToken).to.be.eq(PAYMENT_TOKEN);
 
       await snewsContract.connect(owner).setSigner(root.address);
       const signature = await ServerSignature(
-      snewsContract.address.toLowerCase(),
-        reader.address.toLowerCase(),
-        "35",
-        0,
-        0,
+      snewsContract.address,
+        reader.address,
+        TOTAL_SUPPLY,
+        TOKEN_ID,
+        PAYMENT_TOKEN,
         slug,
         root
       );
 
       
-      
-      console.log("address:", reader.address.toLowerCase())
       await snewsContract
         .connect(reader)
         .claimToken(slug, signature.transaction_id, {
