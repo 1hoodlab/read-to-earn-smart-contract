@@ -38,9 +38,11 @@ To run this project, you will need to add the following environment variables to
 
 - Resolver address:  0xa14e3366AC1Bb1D614696Ce8f2A379271fdaac28
 - TokenUSDT address: 0xd73d3E44a6184179cd9c09cb2e2647981b716568
+  - owner: 0x448b00525CCd4552a5c9eFbBaAB9304e96500c60
 
 ## Snews Contract Address
-- address: 0x1925F67D565a2387b24b7775aD92c823C70623cf
+- address: 0xdE611D7D63D2BaF1F5D311E30937e7bf14097E5a
+- owner: 0xe3Bb87C766d7537ba75D0214232eFB4a22A6eDcd
 
 ## Authors
 
