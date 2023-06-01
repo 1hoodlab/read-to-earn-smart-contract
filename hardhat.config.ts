@@ -105,6 +105,12 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 0,
   },
+
+  gasReporter: {
+    currency: "USD",
+    coinmarketcap: "78843e31-d97f-408c-9995-eb36d03905b5",
+    token: "BNB",
+  },
 };
 
 export default config;
