@@ -5,7 +5,8 @@
     "test": "yarn cache clean && yarn compile && npx hardhat test",
     "deploy:bsc": "npx hardhat run --network bsc scripts/deploy_upgradeable_snews.ts",
     "deploy:util": "npx hardhat run --network bsc scripts/deploy_resolver_and_token.ts",
-    "upgrade:snews": "npx hardhat run --network bsc scripts/upgrade_snews.ts"
+    "upgrade:snews": "npx hardhat run --network bsc scripts/upgrade_snews.ts",
+    "contract:size": "npx hardhat size-contracts"
   },
   "devDependencies": {
     "@ethereum-waffle/chai": "^4.0.10",

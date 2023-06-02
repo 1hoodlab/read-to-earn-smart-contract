@@ -42,6 +42,7 @@ describe("Snews.sol Contract Testing", function () {
   let owner: SignerWithAddress;
   let root: SignerWithAddress;
   let reader: SignerWithAddress;
+  let writer: SignerWithAddress;
 
   let snewsContract: Snews | Contract;
 
@@ -53,6 +54,7 @@ describe("Snews.sol Contract Testing", function () {
       owner = signer[0];
       root = signer[1];
       reader = signer[2];
+      writer = signer[3];
 
       this.SnewsContract = await ethers.getContractFactory("Snews");
 
@@ -107,6 +109,17 @@ describe("Snews.sol Contract Testing", function () {
         snewsContract.connect(owner).createNews(slug, USDT_TOKEN_ID, 0)
       ).to.be.revertedWith("The Slug was used by other people!");
     });
+
+    it("approve Writer role", async function () {
+      let tx = await snewsContract.connect(owner).approveWriterRole(writer.address);
+    });
+
+    it("Set payment token", async function(){
+      let tx = await resolverContract.connect(owner).setPaymentToken(2,"0x7869b4842fD994d14c7CE1F5a226853D348bc66B");
+
+    })
+
+
 
     it("Claim news", async function () {
       const slug = "lorem-spidreum";

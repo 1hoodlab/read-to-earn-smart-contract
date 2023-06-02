@@ -16,6 +16,8 @@ import "@typechain/hardhat";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-waffle";
 
+import "hardhat-contract-sizer";
+
 function node_url(networkName: string): string {
   if (networkName) {
     const uri = process.env[networkName.toUpperCase() + "_TESTNET_URL"];
@@ -110,6 +112,14 @@ const config: HardhatUserConfig = {
     currency: "USD",
     coinmarketcap: "78843e31-d97f-408c-9995-eb36d03905b5",
     token: "BNB",
+    src: "./src",
+    enabled: true,
+  },
+
+  contractSizer: {
+    alphaSort: true,
+    runOnCompile: true,
+    strict: true,
   },
 };
 
