@@ -192,7 +192,6 @@ contract Snews is
 
         currentNews.totalSupply = 0;
 
-        //TODO: Update state: userClaimNews
 
         userClaimNews[_msgSender()][currentNews.tokenId] = true;
         
